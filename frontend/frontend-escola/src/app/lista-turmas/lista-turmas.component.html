@@ -1,0 +1,32 @@
+<input type="text" placeholder="Pesquisar Turma pelo nome" [(ngModel)]="nomePesquisa" (input)="pesquisarTurma()" />
+
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Dia da Semana</th>
+      <th>Horário</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turma of turmas">
+      <td>{{ turma.id }}</td>
+      <td>{{ turma.nome }}</td>
+      <td>{{ turma.dia_semana }}</td>
+      <td>{{ turma.horario_inicio }} - {{ turma.horario_termino }}</td>
+      <td>
+        <span *ngIf="turma.status">Ativo</span>
+        <span *ngIf="!turma.status" class="instatus">Inativo</span>
+      </td>
+      <td>
+        <button *ngIf="turma.status" (click)="editarTurma(turma.id)">Editar</button>
+        <button *ngIf="turma.status" (click)="excluirTurma(turma.id)">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<a routerLink="/reativar-turma"><button>Reativar Turmas</button></a>

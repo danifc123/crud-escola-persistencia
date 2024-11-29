@@ -1,0 +1,16 @@
+<h2>Adicionar Professor</h2>
+<form (ngSubmit)="adicionarProfessor()">
+  <label>
+    Nome:
+    <input [(ngModel)]="professor.nome" name="nome" required />
+  </label>
+  <label>
+    CPF:
+    <input [(ngModel)]="professor.cpf" name="cpf" placeholder="xxx.xxx.xxx-xx" required />
+  </label>
+  <label>
+    Titulação:
+    <input [(ngModel)]="professor.titulacao" name="titulacao" required />
+  </label>
+  <button type="submit">Adicionar</button>
+</form>

@@ -1,0 +1,40 @@
+<!-- Campo de Pesquisa -->
+<input type="text" placeholder="Pesquisar Disciplina pelo nome" [(ngModel)]="nomePesquisa" (input)="pesquisarDisciplinas()" />
+
+<!-- Tabela -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Código</th>
+      <th>Período</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let disciplina of disciplinas">
+      <td>{{ disciplina.id }}</td>
+      <td>{{ disciplina.nome }}</td>
+      <td>{{ disciplina.codigo }}</td>
+      <td>{{ disciplina.periodo }}</td>
+      <td>
+        <span *ngIf="disciplina.status">Ativo</span>
+        <span *ngIf="!disciplina.status" class="instatus">Inativo</span>
+      </td>
+      <td>
+        <button *ngIf="disciplina.status" (click)="editarDisciplina(disciplina.id)">
+          Editar
+        </button>
+        <button *ngIf="disciplina.status" (click)="excluirDisciplina(disciplina.id)">
+          Excluir
+        </button>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+<a routerLink="/reativar-disciplina">
+  <button>Reativar Disciplinas</button>
+</a>

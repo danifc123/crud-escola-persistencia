@@ -1,0 +1,32 @@
+<input type="text" placeholder="Pesquisar Sala pelo nome" [(ngModel)]="nomePesquisa" (input)="pesquisarSalas()" />
+
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Local</th>
+      <th>Capacidade</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let sala of salas">
+      <td>{{ sala.id }}</td>
+      <td>{{ sala.nome }}</td>
+      <td>{{ sala.local }}</td>
+      <td>{{ sala.capacidade }}</td>
+      <td>
+        <span *ngIf="sala.status">Ativo</span>
+        <span *ngIf="!sala.status" class="instatus">Inativo</span>
+      </td>
+      <td>
+        <button *ngIf="sala.status" (click)="editarSala(sala.id)">Editar</button>
+        <button *ngIf="sala.status" (click)="excluirSala(sala.id)">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<a routerLink="/reativar-sala"><button>Reativar Salas</button></a>
