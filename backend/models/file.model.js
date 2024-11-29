@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 
 const fileSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  path: { type: String, required: true },
-  uploadedAt: { type: Date, default: Date.now },
+  filename: {
+    type: String,
+    required: true,
+  },
+  fileUrl: {
+    type: String,
+    required: true,
+  },
 });
 
-module.exports = mongoose.model("File", fileSchema);
+const File = mongoose.model("File", fileSchema);
+
+module.exports = File;

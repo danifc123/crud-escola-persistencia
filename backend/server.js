@@ -89,8 +89,8 @@ app.put(
 
 // mongoDB requisiçoes e google storage requisiçoes
 
-app.post("/upload/mongo-path", fileController.uploadFileWithPathToMongo);
-app.get("/download/mongo-path/:id", fileController.downloadFileFromPathInMongo);
+app.post("/upload/mongo-path", fileController.uploadFile);
+// app.get("/download/mongo-path/:id", fileController.downloadFileFromPathInMongo);
 
 app.get("/professores/log", async (req, res) => {
   try {
