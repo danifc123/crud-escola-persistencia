@@ -1,5 +1,18 @@
 const pool = require("../models/db");
+const Log = require("../models/log.model");
 
+const logActivity = async (req, res) => {
+  try {
+    const newLog = new Log({
+      action: req.body.action,
+      userId: req.body.userId,
+    });
+    await newLog.save();
+    res.status(200).send("Log salvo com sucesso!");
+  } catch (error) {
+    res.status(500).send("Erro ao salvar log: " + error.message);
+  }
+};
 const searchProfessores = async (req, res) => {
   const { nome } = req.query;
 
@@ -155,4 +168,5 @@ module.exports = {
   deleteProfessor,
   reativarProfessor,
   searchProfessores,
+  logActivity,
 };

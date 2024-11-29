@@ -40,3 +40,21 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+# Dependências
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Build
+dist/
+build/
+
+# Ambiente
+.env
+
+# Outros
+.DS_Store
+node_modules/
