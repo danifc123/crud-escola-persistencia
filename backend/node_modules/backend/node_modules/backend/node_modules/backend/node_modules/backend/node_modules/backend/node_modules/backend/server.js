@@ -14,6 +14,8 @@ const alunosController = require("./controllers/alunos.controller");
 const turmasHasAlunosController = require("./controllers/turmasHasAlunos.controller");
 const fileUpload = require("express-fileupload");
 const Log = require("./models/log.model"); // Certifique-se de que o caminho está correto
+const bucket = require("./config/gcs.config"); // Importa o bucket configurado
+const fileController = require("./controllers/file.controller");
 
 connectMongo();
 
@@ -23,10 +25,6 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-const storage = new Storage({
-  keyFilename: "./config/idyllic-adviser-443212-p7-0694283e713d.json",
-  projectId: "idyllic-adviser-443212-p7",
-});
 app.use(fileUpload());
 
 app.get("/pagina-inicial", paginainIcialController.getInicio);
@@ -90,32 +88,10 @@ app.put(
 );
 
 // mongoDB requisiçoes e google storage requisiçoes
-app.post("/upload", async (req, res) => {
-  try {
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send("Nenhum arquivo foi enviado.");
-    }
 
-    const file = req.files.file; // Arquivo enviado no corpo da requisição
-    const blob = storage.bucket(bucketName).file(file.name);
-    const blobStream = blob.createWriteStream();
+app.post("/upload/mongo-path", fileController.uploadFileWithPathToMongo);
+app.get("/download/mongo-path/:id", fileController.downloadFileFromPathInMongo);
 
-    blobStream.on("error", (err) => {
-      console.error("Erro no upload:", err);
-      res.status(500).send("Erro ao fazer upload do arquivo.");
-    });
-
-    blobStream.on("finish", () => {
-      const publicUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
-      res.status(200).send({ success: true, url: publicUrl });
-    });
-
-    blobStream.end(file.data);
-  } catch (error) {
-    console.error("Erro ao processar upload:", error);
-    res.status(500).send("Erro ao fazer upload.");
-  }
-});
 app.get("/professores/log", async (req, res) => {
   try {
     // Usando o modelo Log para buscar os logs
@@ -124,20 +100,20 @@ app.get("/professores/log", async (req, res) => {
   } catch (error) {
     res.status(500).send("Erro ao buscar logs: " + error.message);
   }
-  app.delete("/professores/log/:id", async (req, res) => {
-    try {
-      const logId = req.params.id; // O ID do log a ser deletado
-      const log = await Log.findByIdAndDelete(logId); // Deleta o log pelo ID
+});
+app.delete("/professores/log/:id", async (req, res) => {
+  try {
+    const logId = req.params.id; // O ID do log a ser deletado
+    const log = await Log.findByIdAndDelete(logId); // Deleta o log pelo ID
 
-      if (!log) {
-        return res.status(404).send("Log não encontrado"); // Se o log não for encontrado
-      }
-
-      res.status(200).send("Log deletado com sucesso!"); // Resposta de sucesso
-    } catch (error) {
-      res.status(500).send("Erro ao deletar log: " + error.message); // Se ocorrer um erro
+    if (!log) {
+      return res.status(404).send("Log não encontrado"); // Se o log não for encontrado
     }
-  });
+
+    res.status(200).send("Log deletado com sucesso!"); // Resposta de sucesso
+  } catch (error) {
+    res.status(500).send("Erro ao deletar log: " + error.message); // Se ocorrer um erro
+  }
 });
 
 app.listen(port, () => {
